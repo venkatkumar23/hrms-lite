@@ -1,0 +1,410 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Layout constants ───────────────────────────────────────────── */
+:root {
+  --sidebar-width: 256px;
+  --header-height: 64px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   DARK MODE (default)
+══════════════════════════════════════════════════════════════════ */
+:root,
+html.dark {
+  --bg-app: #020617;
+  /* slate-950 */
+  --bg-sidebar: #0f172a;
+  /* slate-900 */
+  --bg-card: #0f172a;
+  --bg-card-hover: #1e293b;
+  --bg-input: #1e293b;
+  /* slate-800 */
+  --bg-header: rgba(15, 23, 42, 0.75);
+  --bg-table-head: rgba(15, 23, 42, 0.8);
+  --bg-table-row-hover: rgba(30, 41, 59, 0.4);
+  --bg-pill: #1e293b;
+  --bg-modal-overlay: rgba(2, 6, 23, 0.85);
+
+  --border-default: #1e293b;
+  /* slate-800 */
+  --border-subtle: #334155;
+  /* slate-700 */
+  --border-input: #334155;
+
+  --text-primary: #f1f5f9;
+  /* slate-100 */
+  --text-secondary: #cbd5e1;
+  /* slate-300 */
+  --text-muted: #64748b;
+  /* slate-500 */
+  --text-label: #94a3b8;
+  /* slate-400 */
+
+  --nav-text: #94a3b8;
+  --nav-hover-bg: #1e293b;
+  --nav-hover-text: #f1f5f9;
+
+  --toast-bg: #1e293b;
+  --toast-color: #f1f5f9;
+  --toast-border: #334155;
+
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.4), 0 1px 2px -1px rgb(0 0 0 / 0.4);
+  --shadow-card-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   LIGHT MODE
+══════════════════════════════════════════════════════════════════ */
+html.light {
+  --bg-app: #f1f5f9;
+  /* slate-100 */
+  --bg-sidebar: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
+  --bg-input: #f8fafc;
+  --bg-header: rgba(255, 255, 255, 0.9);
+  --bg-table-head: rgba(248, 250, 252, 0.9);
+  --bg-table-row-hover: rgba(241, 245, 249, 0.7);
+  --bg-pill: #e2e8f0;
+  --bg-modal-overlay: rgba(15, 23, 42, 0.6);
+
+  --border-default: #e2e8f0;
+  /* slate-200 */
+  --border-subtle: #cbd5e1;
+  /* slate-300 */
+  --border-input: #cbd5e1;
+
+  --text-primary: #0f172a;
+  /* slate-900 */
+  --text-secondary: #334155;
+  /* slate-700 */
+  --text-muted: #64748b;
+  /* slate-500 */
+  --text-label: #475569;
+  /* slate-600 */
+
+  --nav-text: #475569;
+  --nav-hover-bg: #f1f5f9;
+  --nav-hover-text: #0f172a;
+
+  --toast-bg: #ffffff;
+  --toast-color: #0f172a;
+  --toast-border: #e2e8f0;
+
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-card-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.07);
+}
+
+/* ── Base styles ────────────────────────────────────────────────── */
+@layer base {
+  * {
+    @apply box-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  body {
+    @apply font-sans antialiased min-h-screen;
+    background-color: var(--bg-app);
+    color: var(--text-primary);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold leading-tight tracking-tight;
+  }
+}
+
+/* ── Theme-aware semantic helpers ───────────────────────────────── */
+.app-bg {
+  background-color: var(--bg-app);
+}
+
+.sidebar-bg {
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-default);
+}
+
+.header-bar {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--border-default);
+  backdrop-filter: blur(8px);
+}
+
+.header-title {
+  color: var(--text-primary);
+}
+
+.header-subtitle {
+  color: var(--text-muted);
+}
+
+.pill-bg {
+  background-color: var(--bg-pill);
+  border: 1px solid var(--border-subtle);
+}
+
+.pill-icon {
+  color: var(--text-muted);
+}
+
+.pill-text {
+  color: var(--text-secondary);
+}
+
+.version-badge {
+  background-color: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+/* Theme toggle button */
+.theme-toggle-btn {
+  @apply flex items-center justify-center w-9 h-9 rounded-lg transition-all duration-200;
+  background-color: var(--bg-pill);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-label);
+}
+
+.theme-toggle-btn:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+  color: #3b82f6;
+}
+
+/* ── Component utilities ────────────────────────────────────────── */
+@layer components {
+
+  /* Card */
+  .card {
+    border-radius: 0.75rem;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-default);
+    box-shadow: var(--shadow-card);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .card-hover {
+    @apply card;
+    transition: all 0.2s ease;
+  }
+
+  .card-hover:hover {
+    border-color: var(--border-subtle);
+    box-shadow: var(--shadow-card-lg);
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500 active:bg-primary-800;
+    focus-ring-offset-color: var(--bg-app);
+  }
+
+  .btn-secondary {
+    @apply btn;
+    background-color: var(--bg-input);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--border-default);
+  }
+
+  .btn-secondary:focus {
+    @apply ring-2 ring-slate-500;
+  }
+
+  .btn-danger {
+    @apply btn bg-red-600/10 text-red-400 border border-red-600/30 hover:bg-red-600/20 hover:border-red-500/50 focus:ring-red-500;
+  }
+
+  .btn-success {
+    @apply btn bg-emerald-600/10 text-emerald-400 border border-emerald-600/30 hover:bg-emerald-600/20 hover:border-emerald-500/50 focus:ring-emerald-500;
+  }
+
+  /* Form inputs */
+  .input {
+    @apply w-full px-3.5 py-2.5 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all duration-150;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border-input);
+    color: var(--text-primary);
+  }
+
+  .input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .input-error {
+    @apply border-red-500/70 focus:ring-red-500/50 focus:border-red-500;
+  }
+
+  .label {
+    @apply block text-xs font-semibold uppercase tracking-wider mb-1.5;
+    color: var(--text-label);
+  }
+
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+
+  .badge-present {
+    @apply badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/20;
+  }
+
+  .badge-absent {
+    @apply badge bg-red-500/15 text-red-400 border border-red-500/20;
+  }
+
+  /* Table */
+  .table-container {
+    @apply overflow-x-auto rounded-xl;
+    border: 1px solid var(--border-default);
+  }
+
+  .table {
+    @apply w-full text-sm;
+  }
+
+  .table thead tr {
+    border-bottom: 1px solid var(--border-default);
+    background-color: var(--bg-table-head);
+  }
+
+  .table thead th {
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider;
+    color: var(--text-label);
+  }
+
+  .table tbody tr {
+    border-bottom: 1px solid var(--border-default);
+    transition: background-color 0.1s ease;
+  }
+
+  .table tbody tr:hover {
+    background-color: var(--bg-table-row-hover);
+  }
+
+  .table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .table tbody td {
+    @apply px-4 py-3.5;
+    color: var(--text-secondary);
+  }
+
+  /* Sidebar nav */
+  .nav-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 cursor-pointer;
+    color: var(--nav-text);
+  }
+
+  .nav-item:hover {
+    background-color: var(--nav-hover-bg);
+    color: var(--nav-hover-text);
+  }
+
+  .nav-item-active {
+    @apply nav-item bg-primary-600/15 text-primary-400 border border-primary-600/20;
+  }
+
+  .nav-item-active:hover {
+    @apply bg-primary-600/20 text-primary-300;
+  }
+
+  /* Stat card */
+  .stat-card {
+    @apply card p-5 flex flex-col gap-1;
+  }
+
+  /* Spinner */
+  .spinner {
+    @apply w-5 h-5 border-2 rounded-full animate-spin;
+  }
+
+  .spinner-primary {
+    @apply spinner border-primary-600/30 border-t-primary-500;
+  }
+
+  .spinner-white {
+    @apply spinner border-white/30 border-t-white;
+  }
+}
+
+/* ── Scrollbar styling ──────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background-color: var(--border-subtle);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text-muted);
+}
+
+/* ── Animation utilities ────────────────────────────────────────── */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Modal overlay ──────────────────────────────────────────────── */
+.modal-overlay {
+  @apply fixed inset-0 z-50 flex items-center justify-center p-4;
+  background: var(--bg-modal-overlay);
+  backdrop-filter: blur(4px);
+}
+
+.modal-content {
+  @apply card w-full max-w-lg max-h-[90vh] overflow-y-auto animate-fade-in;
+}
+
+/* ── Toast custom ───────────────────────────────────────────────── */
+.toast-custom {
+  background: var(--toast-bg) !important;
+  color: var(--toast-color) !important;
+  border: 1px solid var(--toast-border) !important;
+  @apply !rounded-xl;
+  box-shadow: var(--shadow-card-lg) !important;
+}
+
+/* ── Select dropdown options ────────────────────────────────────── */
+select option {
+  background-color: var(--bg-input);
+  color: var(--text-primary);
+}
