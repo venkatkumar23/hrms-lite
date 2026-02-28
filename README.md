@@ -5,6 +5,15 @@
   Built with React + FastAPI + MySQL
 </p>
 
+## 🌍 Live Demo
+
+| | URL |
+|---|---|
+| **Frontend** | https://hrms-lite-beryl-five.vercel.app |
+| **Backend API** | https://hrms-lite-psr4.onrender.com |
+| **API Docs** | https://hrms-lite-psr4.onrender.com/docs |
+| **GitHub** | https://github.com/venkatkumar23/hrms-lite |
+
 ---
 
 ## 📋 Project Overview
@@ -40,7 +49,7 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/hrms-lite.git
+git clone https://github.com/venkatkumar23/hrms-lite.git
 cd hrms-lite
 ```
 
@@ -48,10 +57,35 @@ cd hrms-lite
 
 ### 2. Database Setup
 
-```sql
--- Connect to MySQL and create the database
-CREATE DATABASE hrms CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+**Install MySQL** (if not already installed):
+- macOS: `brew install mysql && brew services start mysql`
+- Ubuntu/Debian: `sudo apt install mysql-server && sudo systemctl start mysql`
+- Windows: Download from [mysql.com](https://dev.mysql.com/downloads/installer/)
+
+**Create the database:**
+
+```bash
+# Connect to MySQL (enter your root password when prompted)
+mysql -u root -p
 ```
+
+```sql
+-- Create the database
+CREATE DATABASE hrms CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Verify it was created
+SHOW DATABASES;
+
+-- Exit
+EXIT;
+```
+
+**Set your DATABASE_URL** in `backend/.env`:
+```env
+DATABASE_URL=mysql+pymysql://root:YOUR_PASSWORD@localhost:3306/hrms
+```
+
+> Tables are created automatically when the backend starts via `alembic upgrade head` — no manual table creation needed.
 
 ---
 
@@ -148,7 +182,7 @@ VITE_API_BASE_URL=http://localhost:8000
 3. Set **Build Command**: `pip install -r requirements.txt`
 4. Set **Start Command**: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
 5. Add environment variables:
-   - `DATABASE_URL` — your MySQL connection string (use a hosted DB like PlanetScale or Railway)
+   - `DATABASE_URL` — your MySQL connection string (use a hosted DB like Railway: `mysql+pymysql://user:pass@host:port/railway`)
    - `CORS_ORIGINS` — your Vercel frontend URL
 
 ### Frontend → Vercel
