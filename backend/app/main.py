@@ -9,15 +9,19 @@ from app.database import engine, Base
 from app.routers import employees, attendance
 from app import crud
 from app.database import SessionLocal
-
-
-# ──────────────────── Create tables on startup ───────────────────── #
-# In production prefer Alembic migrations; this is a safety fallback.
-Base.metadata.create_all(bind=engine)
+from contextlib import asynccontextmanager
 
 
 # ──────────────────────── App initialization ─────────────────────── #
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Create tables on startup (safe fallback — alembic is preferred)
+    Base.metadata.create_all(bind=engine)
+    yield
+
+
 app = FastAPI(
+    lifespan=lifespan,
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
     description=(
@@ -71,7 +75,7 @@ def get_dashboard(db: Session = Depends(get_db)):
 
 
 # ────────────────────────── Health Check ─────────────────────────── #
-@app.get("/health", tags=["System"], summary="Health check endpoint")
+@app.api_route("/health", methods=["GET", "HEAD"], tags=["System"], summary="Health check endpoint")
 def health_check():
     """Returns service health status. Used by deployment platforms."""
     return {"status": "ok", "service": settings.APP_NAME, "version": settings.APP_VERSION}
